@@ -1,19 +1,24 @@
 import streamlit as st
+from gtts import gTTS
+import os
 
-st.header('st.button')
 
-st.button('Click me')
-st.checkbox('I agree')
-st.radio('Pick one', ['cats', 'dogs'])
-st.selectbox('Pick one', ['cats', 'dogs'])
-st.multiselect('Buy', ['milk', 'apples', 'potatoes'])
-st.slider('Pick a number', 0, 100)
-st.select_slider('Pick a size', ['S', 'M', 'L'])
-st.text_input('First name')
-st.number_input('Pick a number', 0, 10)
-st.text_area('Text to translate')
-st.date_input('Your birthday')
-st.time_input('Meeting time')
-st.file_uploader('Upload a CSV')
-st.camera_input("Take a picture")
-st.color_picker('Pick a color')
+st.sidebar.header('Input')
+
+def t2s(text, lang, slow_audio_speed):
+    speech = gTTS(text = text, lang = lang, slow = slow_audio_speed)
+    speech.save("t2s.mp3")
+    return "t2s.mp3"
+
+def main():
+    st.title('Google Text 2 Speech')
+    text = st.text_input("Enter somthing", "Type Here ...")
+    lang = st.selectbox("Select Language", ['en', 'jp', 'hi', 'gu', 'mr'])
+    slow_audio_speed = st.checkbox("Slow Audio Speed")
+
+    if st.button("Convert"):
+        audio_file = t2s(text, lang, slow_audio_speed)
+        st.audio(audio_file, format = 'audio/mp3')
+
+if __name__ == "__main__":
+    main()
